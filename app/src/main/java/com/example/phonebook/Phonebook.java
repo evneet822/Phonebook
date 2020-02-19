@@ -31,4 +31,8 @@ public class Phonebook {
     public int getPhoneNumber() {
         return phoneNumber;
     }
+
+    public int getId() {
+        return id;
+    }
 }

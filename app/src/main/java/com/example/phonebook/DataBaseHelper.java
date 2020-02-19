@@ -70,4 +70,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         return sqLiteDatabase.rawQuery("select * from " + TABLE_NAME,null);
     }
+
+    boolean deleteContact(int id){
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+
+        return sqLiteDatabase.delete(TABLE_NAME,COLUMN_ID + "=?", new String[]{String.valueOf(id)}) > 0;
+    }
 }

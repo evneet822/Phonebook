@@ -62,6 +62,26 @@ public class PhonebookActivity extends AppCompatActivity {
         };
 
         listView.setMenuCreator(swipeMenuCreator);
+
+        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                switch (index){
+                    case 0:
+                        if(dataBaseHelper.deleteContact(phonebooks.get(position).getId())){
+                            loadContacts();
+                            ListViewAdaptor listViewAdaptor = new ListViewAdaptor(PhonebookActivity.this,R.layout.display_phonebook,phonebooks);
+                            listView.setAdapter(listViewAdaptor);
+                            break;
+
+                        }
+
+                }
+
+                return false;
+            }
+
+        });
     }
 
 
@@ -73,6 +93,7 @@ public class PhonebookActivity extends AppCompatActivity {
          */
 
         Cursor cursor  = dataBaseHelper.getallcontacts();
+        phonebooks.clear();
 
         if(cursor.moveToFirst()){
             do{
