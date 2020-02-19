@@ -25,6 +25,7 @@ public class PhonebookActivity extends AppCompatActivity {
     DataBaseHelper dataBaseHelper;
     List<Phonebook> phonebooks;
     List<Phonebook> searchedlist;
+    String searchText;
 //    ListView listView;
 
     SwipeMenuListView listView;
@@ -97,14 +98,16 @@ public class PhonebookActivity extends AppCompatActivity {
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index){
                     case 0:
-                        if(dataBaseHelper.deleteContact(phonebooks.get(position).getId())){
-                            loadContacts();
-                            ListViewAdaptor listViewAdaptor = new ListViewAdaptor(PhonebookActivity.this,R.layout.display_phonebook,phonebooks);
-                            listView.setAdapter(listViewAdaptor);
-                            break;
 
-                        }
 
+                            if(dataBaseHelper.deleteContact(phonebooks.get(position).getId())){
+                                loadContacts();
+                                ListViewAdaptor listViewAdaptor = new ListViewAdaptor(PhonebookActivity.this,R.layout.display_phonebook,phonebooks);
+                                listView.setAdapter(listViewAdaptor);
+                                break;
+
+                            }
+                            
                 }
 
                 return false;
@@ -120,6 +123,8 @@ public class PhonebookActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
+                searchText = newText;
 
                 if(!newText.isEmpty()){
                     searchedlist.clear();
