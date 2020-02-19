@@ -21,8 +21,8 @@ public class ListViewAdaptor extends ArrayAdapter {
 
     public ListViewAdaptor(@NonNull Context context, int resource, List<Phonebook> phonebookList) {
         super(context, resource,phonebookList);
-        this.mContext = mContext;
-        this.layoutRes = layoutRes;
+        this.mContext = context;
+        this.layoutRes = resource;
         this.phonebookList = phonebookList;
     }
 
@@ -39,7 +39,7 @@ public class ListViewAdaptor extends ArrayAdapter {
         Phonebook phonebook = phonebookList.get(position);
 
         name.setText(phonebook.getFirstName() + " " + phonebook.getLastName());
-        phone.setText(phonebook.getPhoneNumber());
+        phone.setText(String.valueOf(phonebook.getPhoneNumber()));
         address.setText(phonebook.getAddress());
 
 

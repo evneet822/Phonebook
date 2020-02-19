@@ -40,6 +40,8 @@ public class PhonebookActivity extends AppCompatActivity {
             do{
 //                employeeList.add(new Employee(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getDouble(4)));
                 phonebooks.add(new Phonebook(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getInt(4)));
+                System.out.println(cursor.getInt(0));
+                System.out.println(cursor.getString(1));
 
             }while (cursor.moveToNext());
             cursor.close();
