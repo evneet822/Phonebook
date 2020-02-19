@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     DataBaseHelper dataBaseHelper;
     EditText editTextFirstName,editTextLastName,editTextAddress,editTextPhone;
     Button buttonAdd;
+    boolean selected = false;
+    int sid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,24 @@ public class MainActivity extends AppCompatActivity {
 
         buttonAdd = findViewById(R.id.btn_add);
 
+
+        Intent intent = getIntent();
+        selected = intent.getBooleanExtra("selected",false);
+        String fname = intent.getStringExtra("fname");
+        String lname = intent.getStringExtra("lname");
+        String add = intent.getStringExtra("address");
+        String phn = intent.getStringExtra("phone");
+        sid = intent.getIntExtra("cid",0);
+
+        editTextFirstName.setText(fname);
+        editTextLastName.setText(lname);
+        editTextPhone.setText(phn);
+        editTextAddress.setText(add);
+
+
+
+
+
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,11 +67,40 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                if(dataBaseHelper.addContact(firstname,lastname,address,Integer.parseInt(phonenumber))){
-                    Toast.makeText(MainActivity.this, "Contact saved", Toast.LENGTH_SHORT).show();
+                if(selected){
+
+//                    if(databaseHelper.updateEmployee(employee.getId(),ename,edept,Double.parseDouble(esalary))){
+//                        Toast.makeText(mContext, "employee updated", Toast.LENGTH_SHORT).show();
+//                        loadEmployees();
+//                    }else {
+//                        Toast.makeText(mContext, "employee not updated", Toast.LENGTH_SHORT).show();
+//                    }
+
+                    if(dataBaseHelper.updateContact(sid,firstname,lastname,address,Integer.parseInt(phonenumber))){
+                        Toast.makeText(MainActivity.this, "contact updated", Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        Toast.makeText(MainActivity.this, "not updated", Toast.LENGTH_SHORT).show();
+                    }
+
+                    selected = false;
+
+
+
                 }else {
-                    Toast.makeText(MainActivity.this, "Not saved", Toast.LENGTH_SHORT).show();
+                    if(dataBaseHelper.addContact(firstname,lastname,address,Integer.parseInt(phonenumber))){
+                        Toast.makeText(MainActivity.this, "Contact saved", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(MainActivity.this, "Not saved", Toast.LENGTH_SHORT).show();
+                    }
                 }
+
+
+
+                editTextFirstName.setText("");
+                editTextLastName.setText("");
+                editTextAddress.setText("");
+                editTextPhone.setText("");
 
 
 

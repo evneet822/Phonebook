@@ -13,6 +13,11 @@
 <!--        android:id="@+id/phone_list_view"-->
 <!--        android:padding="10dp"/>-->
 
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_view"/>
+
     <com.baoyz.swipemenulistview.SwipeMenuListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

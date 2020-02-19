@@ -2,11 +2,15 @@ package com.example.phonebook;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -20,9 +24,12 @@ public class PhonebookActivity extends AppCompatActivity {
 
     DataBaseHelper dataBaseHelper;
     List<Phonebook> phonebooks;
+    List<Phonebook> searchedlist;
 //    ListView listView;
 
     SwipeMenuListView listView;
+    Phonebook contact;
+    SearchView searchView;
 
 
     @Override
@@ -31,9 +38,38 @@ public class PhonebookActivity extends AppCompatActivity {
         setContentView(R.layout.activity_phonebook);
 
         listView = findViewById(R.id.phone_list_view);
+        searchView = findViewById(R.id.search_view);
         phonebooks = new ArrayList<>();
+        searchedlist = new ArrayList<>();
         dataBaseHelper = new DataBaseHelper(this);
         loadContacts();
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                contact = phonebooks.get(position);
+                String fn = contact.getFirstName();
+                String ln = contact.getLastName();
+                String ad = contact.getAddress();
+                String ph = String.valueOf(contact.getPhoneNumber());
+                int cid  = contact.getId();
+                boolean selected = true;
+                Intent intent = new Intent(PhonebookActivity.this,MainActivity.class);
+                intent.putExtra("fname",fn);
+                intent.putExtra("lname",ln);
+                intent.putExtra("address",ad);
+                intent.putExtra("phone",ph);
+                intent.putExtra("cid",cid);
+                intent.putExtra("selected",selected);
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                startActivity(intent);
+
+            }
+        });
 
 
         SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
@@ -49,14 +85,7 @@ public class PhonebookActivity extends AppCompatActivity {
 
                 menu.addMenuItem(deleteitem);
 
-                SwipeMenuItem updateitem = new SwipeMenuItem(getApplicationContext());
-                updateitem.setBackground(new ColorDrawable(Color.GRAY));
-                updateitem.setWidth(170);
-                updateitem.setTitle("Update");
-                updateitem.setTitleSize(15);
-                updateitem.setTitleColor(Color.WHITE);
 
-                menu.addMenuItem(updateitem);
 
             }
         };
@@ -81,6 +110,43 @@ public class PhonebookActivity extends AppCompatActivity {
                 return false;
             }
 
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                if(!newText.isEmpty()){
+                    searchedlist.clear();
+                    for(int i = 0;i < phonebooks.size();i++){
+                        Phonebook getcontact =  phonebooks.get(i);
+                        if(getcontact.firstName.contains(newText)){
+                            searchedlist.add(getcontact);
+                        }
+                    }
+
+                    ListViewAdaptor listViewAdaptor = new ListViewAdaptor(PhonebookActivity.this,R.layout.display_phonebook,searchedlist);
+                    listView.setAdapter(listViewAdaptor);
+                }
+
+                if(newText.isEmpty()){
+                    ListViewAdaptor listViewAdaptor = new ListViewAdaptor(PhonebookActivity.this,R.layout.display_phonebook,phonebooks);
+                    listView.setAdapter(listViewAdaptor);
+                }
+
+
+
+
+                return false;
+
+
+
+            }
         });
     }
 
